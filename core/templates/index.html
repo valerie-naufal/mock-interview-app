@@ -1,0 +1,127 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index Page</title>
+    <link rel="stylesheet" href="{% static 'dist/output.css' %}" />
+  </head>
+  <body class="flex flex-col h-screen w-screen overflow-hidden" >
+    <div class="bg-customMain flex flex-row justify-end items-center w-full px-4 py-4 text-white font-bold">
+      <button id="login-button" class="hover:bg-white rounded-lg hover:text-customMain px-4 py-2"> Login </button>
+      <div class="account-menu-content" id="account-menu-loggedIn">
+        <h1 class="font-bold text-customMain text-3xl px-8 pt-4 ">LOGIN</h1>
+        <form class="space-y-4 md:space-y-6" method="POST" >
+          {% csrf_token %}
+          <div>
+              <label for="username" class="block mt-2 mb-2 text-sm font-medium color-primary ">Username</label>
+              <input type="username" name="username" id="username" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="dany_ishak" required="">
+          </div>
+          <div>
+              <label for="password" class="block mb-2 text-sm font-medium color-primary ">Password</label>
+              <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="">
+          </div>
+          <button type="submit" class="w-full bg-customMain text-white bg-sec hover:bg-primary focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-hover">Login</button>
+          <p class="text-sm font-light color-primary pb-4">
+              Don't have an account? <a href="/create-account" class="font-medium color-sec hover:underline dark:text-primary-500">Sign up here</a>
+          </p>
+      </form>
+      </div>
+
+
+    </div>
+
+    <section id="homeSection" class="grid grid-cols-2 gap-4 items-center justify-center">
+			<div class="flex flex-col justify-start h-screen bg-customSec">
+				<h1 class="text-7xl font-extrabold h-64 max-w-2xl mt-32 ml-16">
+					interview_me, your interview platform for 
+					<a href="" class="typewrite" data-period="2000" data-type='["practicing interviewing", "coding with experts", "conquering your fears", "improving your skills" ]'>
+					  <span class="wrap text-white"></span>
+					</a>
+				</h1>
+			</div>
+
+			<div class="flex flex-col items-center -mt-28">
+        <img src="{% static 'images/robot.webp' %}" alt="robot">
+
+			</div>
+
+
+		</section>
+    
+
+
+  <script>
+    let loginButton = document.getElementById("login-button");
+    let loggedInMenu = document.getElementById("account-menu-loggedIn");
+
+    loginButton.onclick = () => {
+      loggedInMenu.classList.toggle("active");
+    };
+
+
+
+    var TxtType = function(el, toRotate, period) {
+			this.toRotate = toRotate;
+			this.el = el;
+			this.loopNum = 0;
+			this.period = parseInt(period, 10) || 2000;
+			this.txt = '';
+			this.tick();
+			this.isDeleting = false;
+		};
+	
+		TxtType.prototype.tick = function() {
+			var i = this.loopNum % this.toRotate.length;
+			var fullTxt = this.toRotate[i];
+	
+			if (this.isDeleting) {
+			this.txt = fullTxt.substring(0, this.txt.length - 1);
+			} else {
+			this.txt = fullTxt.substring(0, this.txt.length + 1);
+			}
+	
+			this.el.innerHTML = '<span class="wrap text-white">'+this.txt+'</span>';
+	
+			var that = this;
+			var delta = 200 - Math.random() * 100;
+	
+			if (this.isDeleting) { delta /= 2; }
+	
+			if (!this.isDeleting && this.txt === fullTxt) {
+			delta = this.period;
+			this.isDeleting = true;
+			} else if (this.isDeleting && this.txt === '') {
+			this.isDeleting = false;
+			this.loopNum++;
+			delta = 500;
+			}
+	
+			setTimeout(function() {
+			that.tick();
+			}, delta);
+		};
+	
+		window.onload = function() {
+			var elements = document.getElementsByClassName('typewrite');
+			for (var i=0; i<elements.length; i++) {
+				var toRotate = elements[i].getAttribute('data-type');
+				var period = elements[i].getAttribute('data-period');
+				if (toRotate) {
+				  new TxtType(elements[i], JSON.parse(toRotate), period);
+				}
+			}
+			// INJECT CSS
+			var css = document.createElement("style");
+			css.type = "text/css";
+			css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #fff}";
+			document.body.appendChild(css);
+		};
+  </script>
+
+  </body>
+
+
+</html>

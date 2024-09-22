@@ -1,0 +1,67 @@
+{% extends 'base.html' %}  
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provide Feedback</title>
+    <link rel="stylesheet" href="{% static 'dist/output.css' %}">
+</head>
+<body class="h-screen">
+    {% block content %}
+<div class="flex flex-row h-full">
+    <div class="relative bg-cover bg-center w-1/3 bg-customSec text-white flex justify-center items-center">
+        <h1 class="flex font-bold items-start justify-center text-3xl mb-4 py-2">Submit your feedback here</h1>
+    </div>       
+    <div class="px-24 w-2/3 flex flex-col justify-center">
+        <p class="text-center"> Use this form to submit your feedback about an interview that you have held. Your interviewee will receive an email with the info you have entered. </p>
+        <form class="w-full flex flex-col justify-center space-y-4 md:space-y-6" method="post" action="{% url 'feedback_form' %}">
+            {% csrf_token %}
+            <div class="flex flex-row justify-around gap-4">
+                <div class="w-1/2">
+                    <label for="booking_id" class="block text-sm font-medium color-primary mb-2">Booking</label>
+                    <select name="booking_id" id="booking_id" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required>
+                        <option selected disabled>Select Booking</option>
+                        {% for booking in bookings %}
+                        <option name="{{booking.id}}">{{booking.id}}</option>
+                        {% endfor %}
+                    </select>
+
+        
+                    <label for="communication_skills" class="block text-sm font-medium color-primary mb-2">Communication Skills</label>
+                    <input type="number" placeholder="Communication Skills" name="communication_skills" id="communication_skills" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+        
+                    <label for="professionalism" class="block text-sm font-medium color-primary mb-2">Professionalism</label>
+                    <input type="number" placeholder="Professionalism" name="professionalism" id="professionalism" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+        
+                    <label for="adaptability" class="block text-sm font-medium color-primary mb-2">Adaptability</label>
+                    <input type="number" placeholder="Adaptability" name="adaptability" id="adaptability" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">    
+                </div>
+                
+                <div class="w-1/2">
+                    <label for="preparation" class="block text-sm font-medium color-primary mb-2">Preparation</label>
+                    <input type="number" placeholder="Preparation" name="preparation" id="preparation" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+    
+                    <label for="competency" class="block text-sm font-medium color-primary mb-2">Competency</label>
+                    <input type="number" placeholder="Competency" name="competency" id="competency" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+    
+                    <label for="time_management" class="block text-sm font-medium color-primary mb-2">Time Management</label>
+                    <input type="number" placeholder="Time Management" name="time_management" id="time_management" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+    
+                    <label for="overall_effectiveness" class="block text-sm font-medium color-primary mb-2">Overall Effectiveness</label>
+                    <input type="text" placeholder="Overall Effectiveness" name="overall_effectiveness" id="overall_effectiveness" class="bg-gray-50 border border-gray-300 color-primary sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 mb-2" required="">
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center">
+                <button class="bg-customMain rounded-lg px-4 py-2 text-white font-bold text-xl hover:bg-white hover:text-blue">Submit</button>
+            </div>  
+        </form>
+    </div>
+
+
+{% endblock %}
+</body>
+</html>

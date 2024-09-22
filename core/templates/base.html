@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'dist/output.css' %}">
+  <title>Interview App</title>
+</head>
+<body class="h-screen">
+  <header class="bg-customMain flex p-4 m-0 px-6">
+      <div class=" bg-customMain flex justify-between h-full mr-0">
+        <nav id="menu" class=" bg-customMain flex flex-row items-center">
+          <a href="{% url 'home' %}" class="block py-2 px-4 text-white font-bold hover:bg-white hover:text-customMain rounded-lg">Home</a>
+          <a href="{% url 'feedback' %}" class="block py-2 px-4 text-white font-bold hover:bg-white hover:text-customMain rounded-lg">Leave a Review</a>
+          <a href="{% url 'host' %}" class="block py-2 px-4 text-white font-bold hover:bg-white hover:text-customMain rounded-lg">Host an Interview</a>
+          <a href="{% url 'my-profile' %}" class="block py-2 px-4 text-white font-bold hover:bg-white hover:text-customMain rounded-lg">My Profile</a>
+          <a href="{% url 'index' %}" class="block py-2 px-4 text-white font-bold hover:bg-white hover:text-customMain rounded-lg">Logout</a>
+        </nav>
+      </div>
+
+  </header>
+    
+  <main class="h-full">
+      {% block content %}{% endblock %}
+  </main>
+
+</body>
+
+</html>

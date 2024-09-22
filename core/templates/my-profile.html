@@ -1,0 +1,170 @@
+{% extends 'base.html' %} {% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Profile</title>
+    <link rel="stylesheet" href="{% static 'dist/output.css' %}" />
+  </head>
+  <body class="h-full">
+  {% block content %}
+
+    <div class="flex flex-col items-center w-full px-4 py-2">
+      <div class="relative mt-4">
+        <div class="bg-customMain bg-cover bg-center bg-opacity-50 w-24 h-24 rounded-full flex items-center justify-center mb-4"></div>
+      </div>
+      <p class="text-customMain font-bold mb-4">{{user}}</p>
+
+      <div class="flex border-customMain">
+        <button class="bg-white text-customMain font-bold px-4 py-2  rounded-l-lg border border-black hover:bg-gray-300 tabs" onclick="openTab(event,'info_tab')">My Info</button>
+        <button class="bg-white text-customMain font-bold px-4 py-2 border border-black hover:bg-gray-300 tabs" onclick="openTab(event,'booking_tab')">Bookings</button>
+        <button class="bg-white text-customMain font-bold px-4 py-2 rounded-r-lg border border-black hover:bg-gray-300 tabs" onclick="openTab(event,'stats_tab')">Statistics</button>
+      </div>
+
+    </div>
+
+    <div class="border-t-2 w-full p-6 mt-4 flex flex-row">
+      <div class="tabcontent w-full flex flex-col justify-center items-center" id="info_tab">
+
+        <h2 class="text-2xl font-bold mb-4">Contact Information</h2>
+        <div class="bg-gray-100 rounded-lg p-4 shadow-md">
+        <p class="text-lg mb-2"><span class="font-semibold">Username:</span> {{ user.username }}</p>
+        <p class="text-lg mb-2"><span class="font-semibold">First Name:</span> {{ user.first_name }}</p>
+        <p class="text-lg mb-2"><span class="font-semibold">Last Name:</span> {{ user.last_name }}</p>
+        <p class="text-lg mb-2"><span class="font-semibold">Email:</span> {{ user.email }}</p>
+        <p class="text-lg mb-2"><span class="font-semibold">Date Joined:</span> {{ user.date_joined|date:"F j, Y" }}</p>
+    </div>
+
+      </div>
+
+      <div class="tabcontent w-full flex flex-col justify-center items-center" id="booking_tab">
+        {% if user_bookings %}
+        <ul>
+            {% for booking in user_bookings %}
+            <div class="booking-box flex flex-col items-center border p-4 rounded-lg mb-4 bg-gray-100 shadow-lg relative">
+              <div class="booking-info flex flex-row gap-4">
+                <div>
+                  <div class="info-title font-bold">Booking ID</div>
+                  <span>{{booking.id}}</span>
+                </div>
+                <div>
+                  <div class="info-title font-bold">Date</div>
+                  <span>{{booking.interview.interview_date}}</span>
+                </div>
+                <div>
+                  <div class="info-title font-bold">Time</div>
+                  <span>{{booking.interview.interview_time}}</span>
+                </div>
+                <div>
+                  <div class="info-title font-bold">Interviewer</div>
+                  <span>{{booking.interviewer}}</span>
+                </div>
+                <div>
+                  <div class="info-title font-bold">Category</div>
+                  <span>{{booking.interview.category}}</span>
+                </div>
+                <div>
+                  <div class="info-title font-bold">Amount ($):</div>
+                  <span>{{booking.interview.price}}</span>
+                </div>            
+              </div>
+            </div>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No bookings found.</p>
+    {% endif %}
+      </div>
+
+      <div class="tabcontent w-full flex flex-col justify-center items-center" id="stats_tab">
+        <div class="flex flex-col justify-center items-center">
+          <h2 class="text-2xl font-semibold mb-4">Average Feedback Scores</h2>
+      
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Communication Skills</div>
+                  <span class="text-lg">{{ average_communication_skills }}</span>
+              </div>
+      
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Professionalism</div>
+                  <span class="text-lg">{{ average_professionalism }}</span>
+              </div>
+      
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Adaptability</div>
+                  <span class="text-lg">{{ average_adaptability }}</span>
+              </div>
+          </div>
+      
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Preparation</div>
+                  <span class="text-lg">{{ average_preparation }}</span>
+              </div>
+      
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Competency</div>
+                  <span class="text-lg">{{ average_competency }}</span>
+              </div>
+      
+              <div class="border p-4 rounded-lg bg-gray-100 shadow-lg">
+                  <div class="font-bold mb-2">Time Management</div>
+                  <span class="text-lg">{{ average_time_management }}</span>
+              </div>
+          </div>
+      </div>
+      
+
+        <div class="w-1/2">
+          <div class="border p-4 rounded-lg m-4 bg-gray-300 shadow-lg relative">  
+            <div class="font-bold w-full text-lg">Overall Effectiveness </div>
+            {% for feedback in related_feedbacks %}
+            <li>Feedback for booking number {{ feedback.id }} : {{ feedback.overall_effectiveness }}</li>
+            {% endfor %} 
+          </div>
+        </div>
+        
+      </div>
+      </div>
+    </div>
+
+    <script>
+        let infoTab = document.getElementById("info_tab");
+        let bookingTab = document.getElementById("booking_tab");
+        let statsTab = document.getElementById("stats_tab");
+
+        window.onload = () =>{
+          document.getElementById("info_tab").style.display="flex";
+          let tabs = document.getElementsByClassName("tabs");
+          tabs[0].className += " active";
+        }
+
+        function openTab(event,tabname){
+            console.log(tabname);
+
+            var i,tabcontent,tabs;
+            tabcontent = document.getElementsByClassName('tabcontent');
+            console.log(tabcontent);
+
+            for(i=0;i<tabcontent.length;i++){
+                tabcontent[i].style.display="none";
+            }
+
+            tabs = document.getElementsByClassName('tabs');
+            console.log(tabs);
+            
+            for(i=0;i<tabs.length;i++){
+                tabs[i].className=tabs[i].className.replace(" active","");
+            }
+            console.log(document.getElementById(tabname));
+            document.getElementById(tabname).style.display="flex";
+            event.currentTarget.className += " active";
+        }
+    </script>
+
+    {% endblock %}
+  </body>
+</html>
